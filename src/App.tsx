@@ -1,26 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {v1} from "uuid";
+import Comment from "./components/Comment/Comment";
+
+export type CommentType = {
+    id: string
+    author: string
+    comment: string
+    children: CommentType[] | null
+    parentId: string | null
+}
+
+const comments: CommentType[] = [
+    {
+        author: "user1",
+        comment: "awesome",
+        id: v1(),
+        children: null,
+        parentId: null,
+    }
+]
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        comments.map(item => <Comment comment={item}/>)
+    );
 }
 
 export default App;
