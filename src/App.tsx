@@ -8,15 +8,45 @@ export type CommentType = {
     comment: string
     childrenCom: CommentType[] | null
     parentId: string | null
+    depth: number
 }
 
+const firstCom = v1();
 const comments: CommentType[] = [
     {
         author: "user1",
         comment: "awesome",
-        id: v1(),
-        childrenCom: null,
+        id: firstCom,
+        childrenCom: [
+            {
+                author: "user1",
+                comment: "awesome",
+                id: v1(),
+                childrenCom: [
+                    {
+                        author: "user1",
+                        comment: "awesome",
+                        id: v1(),
+                        childrenCom: [
+                            {
+                                author: "user1",
+                                comment: "awesome",
+                                id: v1(),
+                                childrenCom: null,
+                                parentId: null,
+                                depth: 3,
+                            }
+                        ],
+                        parentId: null,
+                        depth: 2,
+                    }
+                ],
+                parentId: null,
+                depth: 1,
+            }
+        ],
         parentId: null,
+        depth: 0,
     }
 ]
 
