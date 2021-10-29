@@ -6,7 +6,7 @@ export type CommentType = {
     id: string
     author: string
     comment: string
-    children: CommentType[] | null
+    childrenCom: CommentType[] | null
     parentId: string | null
 }
 
@@ -15,14 +15,16 @@ const comments: CommentType[] = [
         author: "user1",
         comment: "awesome",
         id: v1(),
-        children: null,
+        childrenCom: null,
         parentId: null,
     }
 ]
 
 function App() {
     return (
-        comments.map(item => <Comment comment={item}/>)
+        <>
+            {comments.map(item => <Comment {...item}/>)}
+        </>
     );
 }
 

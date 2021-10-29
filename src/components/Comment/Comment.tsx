@@ -3,10 +3,13 @@ import {CommentType} from "../../App";
 
 
 
-function Comment(props: {comment: CommentType}) {
+function Comment({comment, author, parentId, id, childrenCom}: CommentType) {
 
     return (
-        <div></div>
+        <div>
+            <span><b>{author}</b></span>
+            <p>{comment}</p>
+        </div>
     );
 }
 
