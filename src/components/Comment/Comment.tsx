@@ -1,25 +1,55 @@
-import React, { useState } from "react";
+import React, {FC, useState} from 'react';
 import { CommentType } from "../../App";
 import { Form } from "../Forms/Form";
 import { PrimaryButton } from "@fluentui/react";
+import styled from "styled-components";
 
-function Comment({ comment, author, parentId, id, childrenCom }: CommentType) {
+const CommentContainer = styled.div<{ isFirst: boolean }>`
+    border-left: ${({isFirst}) => !isFirst && "#8597ff solid 1px"};
+    margin: 10px;
+`
+
+const Comment: FC<CommentType> = (
+    {
+        comment, author,
+        parentId, id,
+        childrenCom, depth,
+        children
+    }) => {
+    const [showChildren, setShowChildren] = useState(depth !== 2);
     const [showForm, setShowForm] = useState(false);
 
+    const isFirst = !depth;
+    const renderChildren = () => {
+        return childrenCom?.map(comment => <Comment {...comment}/>)
+    }
+
     return (
-        <div>
-        <span>
-            <b>{author}</b>
-        </span>
-        <p>{comment}</p>
-            {
-                !showForm
+        <CommentContainer isFirst={isFirst}>
+            <div>
+                <span><b>{author}</b></span>
+                <p>{comment}</p>
+                { !showForm
                     ? <PrimaryButton
                         text="Reply"
                         onClick={() => setShowForm(!showForm)}/>
-                : <Form />
+                    : <Form />
+                }
+            </div>
+            {showChildren
+                ? <>
+                    {childrenCom &&
+                        <PrimaryButton
+                            text="-"
+                            onClick={() => setShowChildren(false)}
+                        />}
+                    {renderChildren()}
+                </>
+                : <PrimaryButton
+                    text="Show more"
+                    onClick={() => setShowChildren(true)}/>
             }
-        </div>
+        </CommentContainer>
     );
     }
 
