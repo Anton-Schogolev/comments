@@ -1,9 +1,8 @@
-import React, { FC, useState } from 'react';
-import styled from "styled-components";
-
-import { CommentType } from "../../App";
+import React, {FC, useState} from 'react';
 import { Form } from "../Forms/Form";
 import { PrimaryButton } from "@fluentui/react";
+import styled from "styled-components";
+import {CommentType} from "../../state/reducers/reducer";
 
 const CommentContainer = styled.div<{ isFirst: boolean }>`
     border-left: ${({isFirst}) => !isFirst && "#8597ff solid 1px"};
@@ -13,16 +12,15 @@ const CommentContainer = styled.div<{ isFirst: boolean }>`
 const Comment: FC<CommentType> = (
     {
         comment, author,
-        parentId, id,
-        childrenCom, depth,
-        children
+        parentIds, id,
+        childrenCom
     }) => {
-    const [showChildren, setShowChildren] = useState(depth !== 2);
+    const [showChildren, setShowChildren] = useState(parentIds?.length !== 2);
     const [showForm, setShowForm] = useState(false);
 
-    const isFirst = !depth;
+    const isFirst = !parentIds;
     const renderChildren = () => {
-        return childrenCom?.map(comment => <Comment {...comment}/>)
+        return childrenCom?.map(comment => <Comment key={comment.id} {...comment}/>)
     }
 
     return (
@@ -34,7 +32,7 @@ const Comment: FC<CommentType> = (
                     ? <PrimaryButton
                         text="Reply"
                         onClick={() => setShowForm(!showForm)}/>
-                    : <Form />
+                    : <Form parentIds={[...(parentIds || []), id]}/>
                 }
             </div>
             {showChildren
