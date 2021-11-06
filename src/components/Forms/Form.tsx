@@ -20,6 +20,7 @@ const ErrorContainer = styled.div`
 `;
 
 type PropsType = { parentIds: string[] | null };
+
 export const Form = ({parentIds}: PropsType) => {
     const dispatch = useDispatch();
     const [authorField, setAuthorField] = useState("");
