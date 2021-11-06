@@ -1,59 +1,15 @@
 import React from 'react';
-import {v1} from "uuid";
 import Comment from "./components/Comment/Comment";
-
-export type CommentType = {
-    id: string
-    author: string
-    comment: string
-    childrenCom: CommentType[] | null
-    parentId: string | null
-    depth: number
-}
-
-const firstCom = v1();
-const comments: CommentType[] = [
-    {
-        author: "user1",
-        comment: "awesome",
-        id: firstCom,
-        childrenCom: [
-            {
-                author: "user1",
-                comment: "awesome",
-                id: v1(),
-                childrenCom: [
-                    {
-                        author: "user1",
-                        comment: "awesome",
-                        id: v1(),
-                        childrenCom: [
-                            {
-                                author: "user1",
-                                comment: "awesome",
-                                id: v1(),
-                                childrenCom: null,
-                                parentId: null,
-                                depth: 3,
-                            }
-                        ],
-                        parentId: null,
-                        depth: 2,
-                    }
-                ],
-                parentId: null,
-                depth: 1,
-            }
-        ],
-        parentId: null,
-        depth: 0,
-    }
-]
+import {CommentType} from "./state/reducers/reducer";
+import {useTypedSelector} from "./state/store";
+import {Form} from "./components/Forms/Form";
 
 function App() {
+    const comments = useTypedSelector<CommentType[]>(state => state.comments);
     return (
         <>
-            {comments.map(item => <Comment {...item}/>)}
+            <Form parentIds={null}/>
+            {comments.map(item => <Comment key={item.id} {...item}/>)}
         </>
     );
 }
