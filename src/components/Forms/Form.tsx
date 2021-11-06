@@ -1,13 +1,8 @@
-import React, { useState } from 'react';
-import { TextField } from '@fluentui/react/lib/TextField';
-import styled from 'styled-components';
-import { PrimaryButton } from '@fluentui/react';
+import React, { useState } from "react";
+import styled from "styled-components";
 
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
+import { TextField } from "@fluentui/react/lib/TextField";
+import { PrimaryButton } from "@fluentui/react";
 
 const FieldsContainer = styled.div`
   width: 300px;
@@ -15,33 +10,63 @@ const FieldsContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   padding: 20px;
-`
+`;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`
+const ErrorContainer = styled.div`
+  color: red;
+  margin-left: 20px;
+`;
 
 export const Form = () => {
-  const [newValue, setValue] = useState('');
+  const [authorField, setAuthorField] = useState("");
+  const [commentsField, setCommentsField] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
 
-  const onChangeHandler = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setValue(e.currentTarget.value)
+  const onAuthorFieldChangeHandler = (
+    e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setAuthorField(e.currentTarget.value);
+    setIsDisabled(false);
+  };
+
+  const onCommentsFieldChangeHandler = (
+    e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setCommentsField(e.currentTarget.value);
+    setIsDisabled(false);
+  };
+
+  const disableClick = () => {
+    if (!authorField || !commentsField) {
+      setIsDisabled(!isDisabled);
+    }
   };
 
   return (
-    <FormContainer>
+    <>
       <FieldsContainer>
-      <TextField
-        placeholder="Author"
-        value={newValue}
-        onChange={onChangeHandler}
-      />
-      <TextField placeholder="Comments" />
+        <TextField
+          placeholder="Author"
+          value={authorField}
+          onChange={onAuthorFieldChangeHandler}
+        />
+        <TextField
+          placeholder="Comments"
+          multiline rows={3} 
+          value={commentsField}
+          onChange={onCommentsFieldChangeHandler}
+        />
       </FieldsContainer>
-      <ButtonContainer>
-        <PrimaryButton text="Send"/>
-      </ButtonContainer>
-    </FormContainer>
+      {isDisabled && (
+        <ErrorContainer>
+          {"the author or comments field mustn't be empty !"}
+        </ErrorContainer>
+      )}
+      <PrimaryButton
+        disabled={isDisabled}
+        onClick={disableClick}
+        text="Send"
+      />
+    </>
   );
 };
