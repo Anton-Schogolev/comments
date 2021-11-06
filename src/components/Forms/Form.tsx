@@ -20,26 +20,21 @@ const ErrorContainer = styled.div`
 export const Form = () => {
   const [authorField, setAuthorField] = useState("");
   const [commentsField, setCommentsField] = useState("");
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+  const isDisabled = !authorField || !commentsField;
 
   const onAuthorFieldChangeHandler = (
     e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setAuthorField(e.currentTarget.value);
-    setIsDisabled(false);
+    setIsDirty(true);
   };
 
   const onCommentsFieldChangeHandler = (
     e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setCommentsField(e.currentTarget.value);
-    setIsDisabled(false);
-  };
-
-  const disableClick = () => {
-    if (!authorField || !commentsField) {
-      setIsDisabled(!isDisabled);
-    }
+    setIsDirty(true);
   };
 
   return (
@@ -57,14 +52,13 @@ export const Form = () => {
           onChange={onCommentsFieldChangeHandler}
         />
       </FieldsContainer>
-      {isDisabled && (
+      {isDirty && isDisabled && (
         <ErrorContainer>
           {"the author or comments field mustn't be empty !"}
         </ErrorContainer>
       )}
       <PrimaryButton
         disabled={isDisabled}
-        onClick={disableClick}
         text="Send"
       />
     </>
